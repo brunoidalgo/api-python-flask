@@ -1,4 +1,6 @@
 from flask import Flask, jsonify, request
+import pandas as pd
+from sqlalchemy import create_engine
 
 app = Flask(__name__)
 
@@ -21,6 +23,12 @@ livros = [
   }
 ]
 
+livros_novos = pd.DataFrame(livros, columns = ["id","título", "autor"])
+
+db_connection = ...
+db_connection = create_engine(db_connection)
+
+print(livros_novos)
 
 # Consultar todos 
 @app.route('/livros', methods=['GET'])
