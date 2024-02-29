@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import pandas as pd
 from sqlalchemy import create_engine
+from config import usuario, senha, host, porta, banco_de_dados
 
 app = Flask(__name__)
 
@@ -25,10 +26,16 @@ livros = [
 
 livros_novos = pd.DataFrame(livros, columns = ["id","título", "autor"])
 
-db_connection = ...
-db_connection = create_engine(db_connection)
+# Construa a URL de conexão correta
+url_conexao = f'mysql+mysqlconnector://{usuario}:{senha}@{host}:{porta}/{banco_de_dados}'
 
-print(livros_novos)
+# Crie a conexão com o banco de dados
+db_connection = create_engine(url_conexao)
+
+# Agora, você pode prosseguir com a gravação dos dados
+livros_novos.to_sql(con=db_connection, name='livros', if_exists='replace', index=False)
+print("Dados gravados com sucesso")
+
 
 # Consultar todos 
 @app.route('/livros', methods=['GET'])
